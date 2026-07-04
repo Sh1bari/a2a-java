@@ -31,6 +31,6 @@ public interface MessageSendConfigurationMapper {
      * Uses Builder pattern for record construction.
      */
     @BeanMapping(builder = @Builder(buildMethod = "build"))
-    @Mapping(target = "acceptedOutputModes", expression = "java(org.a2aproject.sdk.grpc.mapper.A2ACommonFieldMapper.INSTANCE.emptyListToNull(proto.getAcceptedOutputModesList()))")
+    @Mapping(target = "acceptedOutputModes", source = "acceptedOutputModes")
     MessageSendConfiguration fromProto(org.a2aproject.sdk.grpc.SendMessageConfiguration proto);
 }

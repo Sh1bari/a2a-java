@@ -1,12 +1,10 @@
 package org.a2aproject.sdk.spec;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 import org.a2aproject.sdk.util.Assert;
 import org.jspecify.annotations.Nullable;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * The AgentCard is a self-describing manifest for an agent in the A2A Protocol.
@@ -52,14 +50,14 @@ public record AgentCard(
         List<String> defaultInputModes,
         List<String> defaultOutputModes,
         List<AgentSkill> skills,
-        @Nullable Map<String, SecurityScheme> securitySchemes,
-        @Nullable List<SecurityRequirement> securityRequirements,
+        Map<String, SecurityScheme> securitySchemes,
+        List<SecurityRequirement> securityRequirements,
         @Nullable String iconUrl,
         List<AgentInterface> supportedInterfaces,
-        @Nullable List<AgentCardSignature> signatures,
+        List<AgentCardSignature> signatures,
         @Nullable String url,
         @Nullable String preferredTransport,
-        @Nullable List<Legacy_0_3_AgentInterface> additionalInterfaces) {
+        List<Legacy_0_3_AgentInterface> additionalInterfaces) {
 
     /**
      * Compact constructor that validates required fields.
@@ -87,8 +85,20 @@ public record AgentCard(
         Assert.checkNotNullParam("description", description);
         Assert.checkNotNullParam("name", name);
         Assert.checkNotNullParam("skills", skills);
+        Assert.checkNotNullParam("securitySchemes", securitySchemes);
+        Assert.checkNotNullParam("securityRequirements", securityRequirements);
         Assert.checkNotNullParam("supportedInterfaces", supportedInterfaces);
+        Assert.checkNotNullParam("signatures", signatures);
+        Assert.checkNotNullParam("additionalInterfaces", additionalInterfaces);
         Assert.checkNotNullParam("version", version);
+        defaultInputModes = List.copyOf(defaultInputModes);
+        defaultOutputModes = List.copyOf(defaultOutputModes);
+        skills = List.copyOf(skills);
+        securitySchemes = Map.copyOf(securitySchemes);
+        securityRequirements = List.copyOf(securityRequirements);
+        supportedInterfaces = List.copyOf(supportedInterfaces);
+        signatures = List.copyOf(signatures);
+        additionalInterfaces = List.copyOf(additionalInterfaces);
     }
 
     /**
@@ -151,17 +161,17 @@ public record AgentCard(
         private @Nullable String version;
         private @Nullable String documentationUrl;
         private @Nullable AgentCapabilities capabilities;
-        private @Nullable List<String> defaultInputModes;
-        private @Nullable List<String> defaultOutputModes;
-        private @Nullable List<AgentSkill> skills;
-        private @Nullable Map<String, SecurityScheme> securitySchemes;
-        private @Nullable List<SecurityRequirement> securityRequirements;
+        private List<String> defaultInputModes = List.of();
+        private List<String> defaultOutputModes = List.of();
+        private List<AgentSkill> skills = List.of();
+        private Map<String, SecurityScheme> securitySchemes = Map.of();
+        private List<SecurityRequirement> securityRequirements = List.of();
         private @Nullable String iconUrl;
-        private @Nullable List<AgentInterface> supportedInterfaces;
-        private @Nullable List<AgentCardSignature> signatures;
+        private List<AgentInterface> supportedInterfaces = List.of();
+        private List<AgentCardSignature> signatures = List.of();
         private @Nullable String url;
         private @Nullable String preferredTransport;
-        private @Nullable List<Legacy_0_3_AgentInterface> additionalInterfaces;
+        private List<Legacy_0_3_AgentInterface> additionalInterfaces = List.of();
 
         /**
          * Creates a new Builder with all fields unset.
@@ -184,17 +194,17 @@ public record AgentCard(
             this.version = card.version();
             this.documentationUrl = card.documentationUrl();
             this.capabilities = card.capabilities();
-            this.defaultInputModes = card.defaultInputModes() != null ? new ArrayList<>(card.defaultInputModes()) : Collections.emptyList();
-            this.defaultOutputModes = card.defaultOutputModes() != null ? new ArrayList<>(card.defaultOutputModes()) : Collections.emptyList();
-            this.skills = card.skills() != null ? new ArrayList<>(card.skills()) : Collections.emptyList();
-            this.securitySchemes = card.securitySchemes() != null ? Map.copyOf(card.securitySchemes()) : Collections.emptyMap();
-            this.securityRequirements = card.securityRequirements() != null ? new ArrayList<>(card.securityRequirements()) : Collections.emptyList();
+            this.defaultInputModes = List.copyOf(card.defaultInputModes());
+            this.defaultOutputModes = List.copyOf(card.defaultOutputModes());
+            this.skills = List.copyOf(card.skills());
+            this.securitySchemes = Map.copyOf(card.securitySchemes());
+            this.securityRequirements = List.copyOf(card.securityRequirements());
             this.iconUrl = card.iconUrl();
-            this.supportedInterfaces = card.supportedInterfaces() != null ? new ArrayList<>(card.supportedInterfaces()) : Collections.emptyList();
-            this.signatures = card.signatures() != null ? new ArrayList<>(card.signatures()) : null;
+            this.supportedInterfaces = List.copyOf(card.supportedInterfaces());
+            this.signatures = List.copyOf(card.signatures());
             this.url =  card.url();
             this.preferredTransport= card.preferredTransport();
-            this.additionalInterfaces = card.additionalInterfaces() != null ? new ArrayList<>(card.additionalInterfaces()) : null;
+            this.additionalInterfaces = List.copyOf(card.additionalInterfaces());
         }
 
         /**
@@ -276,7 +286,7 @@ public record AgentCard(
          * @return this builder for method chaining
          */
         public Builder defaultInputModes(List<String> defaultInputModes) {
-            this.defaultInputModes = defaultInputModes;
+            this.defaultInputModes = List.copyOf(defaultInputModes);
             return this;
         }
 
@@ -289,7 +299,7 @@ public record AgentCard(
          * @return this builder for method chaining
          */
         public Builder defaultOutputModes(List<String> defaultOutputModes) {
-            this.defaultOutputModes = defaultOutputModes;
+            this.defaultOutputModes = List.copyOf(defaultOutputModes);
             return this;
         }
 
@@ -304,7 +314,7 @@ public record AgentCard(
          * @see AgentSkill
          */
         public Builder skills(List<AgentSkill> skills) {
-            this.skills = skills;
+            this.skills = List.copyOf(skills);
             return this;
         }
 
@@ -319,7 +329,7 @@ public record AgentCard(
          * @see SecurityScheme
          */
         public Builder securitySchemes(Map<String, SecurityScheme> securitySchemes) {
-            this.securitySchemes = securitySchemes;
+            this.securitySchemes = Map.copyOf(securitySchemes);
             return this;
         }
 
@@ -331,7 +341,7 @@ public record AgentCard(
          * @see SecurityRequirement
          */
         public Builder securityRequirements(List<SecurityRequirement> securityRequirements) {
-            this.securityRequirements = securityRequirements;
+            this.securityRequirements = List.copyOf(securityRequirements);
             return this;
         }
 
@@ -366,7 +376,7 @@ public record AgentCard(
          * @see AgentInterface
          */
         public Builder supportedInterfaces(List<AgentInterface> supportedInterfaces) {
-            this.supportedInterfaces = supportedInterfaces;
+            this.supportedInterfaces = List.copyOf(supportedInterfaces);
             return this;
         }
 
@@ -381,7 +391,7 @@ public record AgentCard(
          * @see AgentCardSignature
          */
         public Builder signatures(List<AgentCardSignature> signatures) {
-            this.signatures = signatures;
+            this.signatures = List.copyOf(signatures);
             return this;
         }
 
@@ -396,7 +406,7 @@ public record AgentCard(
         }
 
         public Builder additionalInterfaces(List<Legacy_0_3_AgentInterface> additionalInterfaces) {
-            this.additionalInterfaces = additionalInterfaces;
+            this.additionalInterfaces = List.copyOf(additionalInterfaces);
             return this;
         }
 

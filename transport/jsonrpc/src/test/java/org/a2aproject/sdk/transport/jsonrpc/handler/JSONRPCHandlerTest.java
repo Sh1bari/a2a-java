@@ -811,7 +811,7 @@ public class JSONRPCHandlerTest extends AbstractA2ARequestHandlerTest {
             assertEquals(MINIMAL_TASK.id(), task1.id());
             assertEquals(MINIMAL_TASK.contextId(), task1.contextId());
             assertEquals(MINIMAL_TASK.status().state(), task1.status().state());
-            assertEquals(0, task1.artifacts() == null ? 0 : task1.artifacts().size());
+            assertTrue(task1.artifacts().isEmpty());
 
             // Event 1: TaskArtifactUpdateEvent
             assertTrue(httpClient.events.get(1) instanceof TaskArtifactUpdateEvent, "Second event should be TaskArtifactUpdateEvent");

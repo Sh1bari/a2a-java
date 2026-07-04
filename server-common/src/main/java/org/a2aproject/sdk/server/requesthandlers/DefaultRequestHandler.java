@@ -316,7 +316,7 @@ public class DefaultRequestHandler implements RequestHandler {
      * @return the task with limited history, or the original task if no limiting needed
      */
     private static Task limitTaskHistory(Task task, @Nullable Integer historyLength) {
-        if (task.history() == null || historyLength == null || historyLength >= task.history().size()) {
+        if (historyLength == null || historyLength >= task.history().size()) {
             return task;
         }
         // Keep only the most recent historyLength messages
@@ -453,15 +453,13 @@ public class DefaultRequestHandler implements RequestHandler {
         ResultAggregator resultAggregator = new ResultAggregator(mss.taskManager, null, executor, eventConsumerExecutor);
 
         // Default to blocking per A2A spec (returnImmediately defaults to false, meaning wait for completion)
-        boolean returnImmediately = params.configuration() != null && Boolean.TRUE.equals(params.configuration().returnImmediately());
+        boolean returnImmediately = params.configuration() != null && params.configuration().returnImmediately();
         boolean blocking = !returnImmediately;
 
         // Log return behavior from client request
-        if (params.configuration() != null && params.configuration().returnImmediately() != null) {
+        if (params.configuration() != null) {
             LOGGER.debug("DefaultRequestHandler: Client requested returnImmediately={}, using blocking={} for task {}",
                 params.configuration().returnImmediately(), blocking, taskId.get());
-        } else if (params.configuration() != null) {
-            LOGGER.debug("DefaultRequestHandler: Client sent configuration but returnImmediately=null, using default blocking={} for task {}", blocking, taskId.get());
         } else {
             LOGGER.debug("DefaultRequestHandler: Client sent no configuration, using default blocking={} for task {}", blocking, taskId.get());
         }

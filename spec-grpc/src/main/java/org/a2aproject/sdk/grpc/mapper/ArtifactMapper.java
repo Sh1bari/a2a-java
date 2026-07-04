@@ -36,6 +36,6 @@ public interface ArtifactMapper {
     @Mapping(target = "name", source = "name", qualifiedByName = "emptyToNull")
     @Mapping(target = "description", source = "description", qualifiedByName = "emptyToNull")
     @Mapping(target = "metadata", source = "metadata", qualifiedByName = "metadataFromProto")
-    @Mapping(target = "extensions", source = "extensions", qualifiedByName = "emptyListToNull")
+    @Mapping(target = "extensions", source = "extensions")
     Artifact fromProto(org.a2aproject.sdk.grpc.Artifact proto);
 }

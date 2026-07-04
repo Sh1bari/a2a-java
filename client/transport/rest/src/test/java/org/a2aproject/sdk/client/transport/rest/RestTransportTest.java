@@ -151,7 +151,8 @@ public class RestTransportTest {
         assertTrue(history.parts().get(0) instanceof org.a2aproject.sdk.spec.TextPart);
         assertEquals("tell me a joke", ((TextPart) history.parts().get(0)).text());
         assertNull(task.metadata());
-        assertNull(history.referenceTaskIds());
+        assertNotNull(history.referenceTaskIds());
+        assertTrue(history.referenceTaskIds().isEmpty());
     }
 
     /**
@@ -229,7 +230,8 @@ public class RestTransportTest {
         assertEquals("text/plain", part.file().mimeType());
         assertEquals("aGVsbG8=", ((FileWithBytes) part.file()).bytes());
         assertNull(history.metadata());
-        assertNull(history.referenceTaskIds());
+        assertNotNull(history.referenceTaskIds());
+        assertTrue(history.referenceTaskIds().isEmpty());
     }
 
     /**

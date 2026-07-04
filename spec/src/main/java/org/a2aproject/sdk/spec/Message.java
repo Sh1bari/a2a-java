@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.a2aproject.sdk.util.Assert;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -38,9 +39,9 @@ public record Message(Role role, List<Part<?>> parts,
         String messageId,
         @Nullable String contextId,
         @Nullable String taskId,
-        @Nullable List<String> referenceTaskIds,
+        List<String> referenceTaskIds,
         @Nullable Map<String, Object> metadata,
-        @Nullable List<String> extensions
+        List<String> extensions
         ) implements EventKind, StreamingEventKind {
 
     /**
@@ -61,17 +62,42 @@ public record Message(Role role, List<Part<?>> parts,
      * @param extensions list of protocol extensions used in this message
      * @throws IllegalArgumentException if role, parts, or messageId is null, or if parts is empty
      */
-    public Message {
+    public Message(Role role,
+                   List<Part<?>> parts,
+                   String messageId,
+                   @Nullable String contextId,
+                   @Nullable String taskId,
+                   List<String> referenceTaskIds,
+                   @Nullable Map<String, Object> metadata,
+                   List<String> extensions) {
         Assert.checkNotNullParam("role", role);
         Assert.checkNotNullParam("parts", parts);
         Assert.checkNotNullParam("messageId", messageId);
         if (parts.isEmpty()) {
             throw new IllegalArgumentException("Parts cannot be empty");
         }
-        parts = List.copyOf(parts);
-        referenceTaskIds = referenceTaskIds != null ? List.copyOf(referenceTaskIds) : null;
-        metadata = (metadata != null) ? Map.copyOf(metadata) : null;
-        extensions = extensions != null ? List.copyOf(extensions) : null;
+        @NonNull List<Part<?>> safeParts = List.copyOf(parts);
+        @NonNull List<String> safeReferenceTaskIds;
+        if (referenceTaskIds == null) {
+            safeReferenceTaskIds = List.of();
+        } else {
+            safeReferenceTaskIds = List.copyOf(referenceTaskIds);
+        }
+        Map<String, Object> safeMetadata = metadata != null ? Map.copyOf(metadata) : null;
+        @NonNull List<String> safeExtensions;
+        if (extensions == null) {
+            safeExtensions = List.of();
+        } else {
+            safeExtensions = List.copyOf(extensions);
+        }
+        this.role = role;
+        this.parts = safeParts;
+        this.messageId = messageId;
+        this.contextId = contextId;
+        this.taskId = taskId;
+        this.referenceTaskIds = safeReferenceTaskIds;
+        this.metadata = safeMetadata;
+        this.extensions = safeExtensions;
     }
 
     @Override
@@ -138,20 +164,17 @@ public record Message(Role role, List<Part<?>> parts,
 
         private @Nullable
         Role role;
-        private @Nullable
-        List<Part<?>> parts;
+        private List<Part<?>> parts = List.of();
         private @Nullable
         String messageId;
         private @Nullable
         String contextId;
         private @Nullable
         String taskId;
-        private @Nullable
-        List<String> referenceTaskIds;
+        private List<String> referenceTaskIds = List.of();
         private @Nullable
         Map<String, Object> metadata;
-        private @Nullable
-        List<String> extensions;
+        private List<String> extensions = List.of();
 
         /**
          * Creates a new Builder with all fields unset.
@@ -193,7 +216,7 @@ public record Message(Role role, List<Part<?>> parts,
          * @return this builder for method chaining
          */
         public Builder parts(List<Part<?>> parts) {
-            this.parts = parts;
+            this.parts = List.copyOf(parts);
             return this;
         }
 
@@ -249,7 +272,7 @@ public record Message(Role role, List<Part<?>> parts,
          * @param referenceTaskIds the list of reference task IDs (optional)
          * @return this builder for method chaining
          */
-        public Builder referenceTaskIds(List<String> referenceTaskIds) {
+        public Builder referenceTaskIds(@Nullable List<String> referenceTaskIds) {
             this.referenceTaskIds = referenceTaskIds;
             return this;
         }
@@ -271,8 +294,8 @@ public record Message(Role role, List<Part<?>> parts,
          * @param extensions the list of extension identifiers (optional)
          * @return this builder for method chaining
          */
-        public Builder extensions(List<String> extensions) {
-            this.extensions = (extensions == null) ? null : List.copyOf(extensions);
+        public Builder extensions(@Nullable List<String> extensions) {
+            this.extensions = extensions;
             return this;
         }
 

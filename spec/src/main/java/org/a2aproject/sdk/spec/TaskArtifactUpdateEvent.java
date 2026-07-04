@@ -62,6 +62,7 @@ public record TaskArtifactUpdateEvent(String taskId, Artifact artifact, String c
         Assert.checkNotNullParam("taskId", taskId);
         Assert.checkNotNullParam("artifact", artifact);
         Assert.checkNotNullParam("contextId", contextId);
+        metadata = metadata == null ? null : Map.copyOf(metadata);
     }
 
     @Override
@@ -199,8 +200,8 @@ public record TaskArtifactUpdateEvent(String taskId, Artifact artifact, String c
          * @param metadata map of metadata key-value pairs (optional)
          * @return this builder for method chaining
          */
-        public Builder metadata(Map<String, Object> metadata) {
-            this.metadata = metadata;
+        public Builder metadata(@Nullable Map<String, Object> metadata) {
+            this.metadata = metadata == null ? null : Map.copyOf(metadata);
             return this;
         }
 

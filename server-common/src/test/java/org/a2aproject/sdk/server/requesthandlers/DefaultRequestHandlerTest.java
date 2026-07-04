@@ -887,8 +887,8 @@ public class DefaultRequestHandlerTest {
             existingTask.id(),
             originalContextId,
             new TaskStatus(TaskState.TASK_STATE_WORKING),
-            null,
-            null,
+            List.of(),
+            List.of(),
             null
         );
         taskStore.save(workingTask, false);
@@ -930,8 +930,8 @@ public class DefaultRequestHandlerTest {
             taskId,
             "ctx-1",
             new TaskStatus(TaskState.TASK_STATE_WORKING),
-            null,
-            null,
+            List.of(),
+            List.of(),
             null
         );
         taskStore.save(task, false);

@@ -485,7 +485,7 @@ public class GrpcHandlerTest extends AbstractA2ARequestHandlerTest {
             Assertions.assertEquals(AbstractA2ARequestHandlerTest.MINIMAL_TASK.id(), task1.id());
             Assertions.assertEquals(AbstractA2ARequestHandlerTest.MINIMAL_TASK.contextId(), task1.contextId());
             Assertions.assertEquals(AbstractA2ARequestHandlerTest.MINIMAL_TASK.status().state(), task1.status().state());
-            Assertions.assertEquals(0, task1.artifacts() == null ? 0 : task1.artifacts().size());
+            Assertions.assertTrue(task1.artifacts().isEmpty());
 
             // Event 1: TaskArtifactUpdateEvent
             Assertions.assertTrue(httpClient.events.get(1) instanceof TaskArtifactUpdateEvent, "Second event should be TaskArtifactUpdateEvent");

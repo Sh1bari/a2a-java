@@ -3,6 +3,7 @@ package org.a2aproject.sdk.spec;
 import java.util.List;
 
 import org.a2aproject.sdk.util.Assert;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -40,8 +41,8 @@ import org.jspecify.annotations.Nullable;
  * @see <a href="https://a2a-protocol.org/latest/">A2A Protocol Specification</a>
  */
 public record AgentSkill(String id, String name, String description, List<String> tags,
-                         @Nullable List<String> examples, @Nullable List<String> inputModes, @Nullable List<String> outputModes,
-                         @Nullable List<SecurityRequirement> securityRequirements) {
+                         List<String> examples, List<String> inputModes, List<String> outputModes,
+                         List<SecurityRequirement> securityRequirements) {
 
     /**
      * Compact constructor that validates required fields.
@@ -56,11 +57,55 @@ public record AgentSkill(String id, String name, String description, List<String
      * @param securityRequirements the security parameter (see class-level JavaDoc)
      * @throws IllegalArgumentException if id, name, description, or tags is null
      */
-    public AgentSkill {
+    public AgentSkill(String id,
+                      String name,
+                      String description,
+                      List<String> tags,
+                      List<String> examples,
+                      List<String> inputModes,
+                      List<String> outputModes,
+                      List<SecurityRequirement> securityRequirements) {
         Assert.checkNotNullParam("id", id);
         Assert.checkNotNullParam("name", name);
         Assert.checkNotNullParam("description", description);
-        Assert.checkNotNullParam("tags", tags);
+        @NonNull List<String> safeTags;
+        if (tags == null) {
+            safeTags = List.of();
+        } else {
+            safeTags = List.copyOf(tags);
+        }
+        @NonNull List<String> safeExamples;
+        if (examples == null) {
+            safeExamples = List.of();
+        } else {
+            safeExamples = List.copyOf(examples);
+        }
+        @NonNull List<String> safeInputModes;
+        if (inputModes == null) {
+            safeInputModes = List.of();
+        } else {
+            safeInputModes = List.copyOf(inputModes);
+        }
+        @NonNull List<String> safeOutputModes;
+        if (outputModes == null) {
+            safeOutputModes = List.of();
+        } else {
+            safeOutputModes = List.copyOf(outputModes);
+        }
+        @NonNull List<SecurityRequirement> safeSecurityRequirements;
+        if (securityRequirements == null) {
+            safeSecurityRequirements = List.of();
+        } else {
+            safeSecurityRequirements = List.copyOf(securityRequirements);
+        }
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.tags = safeTags;
+        this.examples = safeExamples;
+        this.inputModes = safeInputModes;
+        this.outputModes = safeOutputModes;
+        this.securityRequirements = safeSecurityRequirements;
     }
 
     /**
@@ -101,10 +146,10 @@ public record AgentSkill(String id, String name, String description, List<String
         private @Nullable String name;
         private @Nullable String description;
         private @Nullable List<String> tags;
-        private @Nullable List<String> examples;
-        private @Nullable List<String> inputModes;
-        private @Nullable List<String> outputModes;
-        private @Nullable List<SecurityRequirement> securityRequirements;
+        private List<String> examples = List.of();
+        private List<String> inputModes = List.of();
+        private List<String> outputModes = List.of();
+        private List<SecurityRequirement> securityRequirements = List.of();
 
         /**
          * Creates a new Builder with all fields unset.
@@ -162,7 +207,7 @@ public record AgentSkill(String id, String name, String description, List<String
          * @param tags list of tags (required, may be empty)
          * @return this builder for method chaining
          */
-        public Builder tags(List<String> tags) {
+        public Builder tags(@Nullable List<String> tags) {
             this.tags = tags;
             return this;
         }
@@ -176,7 +221,7 @@ public record AgentSkill(String id, String name, String description, List<String
          * @param examples list of example queries (optional)
          * @return this builder for method chaining
          */
-        public Builder examples(List<String> examples) {
+        public Builder examples(@Nullable List<String> examples) {
             this.examples = examples;
             return this;
         }
@@ -190,7 +235,7 @@ public record AgentSkill(String id, String name, String description, List<String
          * @param inputModes list of supported input formats (optional)
          * @return this builder for method chaining
          */
-        public Builder inputModes(List<String> inputModes) {
+        public Builder inputModes(@Nullable List<String> inputModes) {
             this.inputModes = inputModes;
             return this;
         }
@@ -204,7 +249,7 @@ public record AgentSkill(String id, String name, String description, List<String
          * @param outputModes list of supported output formats (optional)
          * @return this builder for method chaining
          */
-        public Builder outputModes(List<String> outputModes) {
+        public Builder outputModes(@Nullable List<String> outputModes) {
             this.outputModes = outputModes;
             return this;
         }
@@ -221,7 +266,7 @@ public record AgentSkill(String id, String name, String description, List<String
          * @return this builder for method chaining
          * @see SecurityRequirement
          */
-        public Builder securityRequirements(List<SecurityRequirement> securityRequirements) {
+        public Builder securityRequirements(@Nullable List<SecurityRequirement> securityRequirements) {
             this.securityRequirements = securityRequirements;
             return this;
         }

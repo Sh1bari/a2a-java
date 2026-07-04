@@ -40,7 +40,7 @@ public interface MessageMapper {
     @Mapping(target = "contextId", source = "contextId", qualifiedByName = "emptyToNull")
     @Mapping(target = "taskId", source = "taskId", qualifiedByName = "emptyToNull")
     @Mapping(target = "metadata", source = "metadata", qualifiedByName = "metadataFromProto")
-    @Mapping(target = "extensions", expression = "java(org.a2aproject.sdk.grpc.mapper.A2ACommonFieldMapper.INSTANCE.emptyListToNull(proto.getExtensionsList()))")
-    @Mapping(target = "referenceTaskIds", expression = "java(org.a2aproject.sdk.grpc.mapper.A2ACommonFieldMapper.INSTANCE.emptyListToNull(proto.getReferenceTaskIdsList()))")
+    @Mapping(target = "extensions", source = "extensions")
+    @Mapping(target = "referenceTaskIds", source = "referenceTaskIds")
     Message fromProto(org.a2aproject.sdk.grpc.Message proto);
 }

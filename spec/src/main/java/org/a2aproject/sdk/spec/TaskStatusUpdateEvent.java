@@ -1,11 +1,5 @@
 package org.a2aproject.sdk.spec;
 
-import static org.a2aproject.sdk.spec.TaskState.TASK_STATE_CANCELED;
-import static org.a2aproject.sdk.spec.TaskState.TASK_STATE_COMPLETED;
-import static org.a2aproject.sdk.spec.TaskState.TASK_STATE_FAILED;
-import static org.a2aproject.sdk.spec.TaskState.TASK_STATE_INPUT_REQUIRED;
-import static org.a2aproject.sdk.spec.TaskState.TASK_STATE_REJECTED;
-
 import java.util.Map;
 
 import org.a2aproject.sdk.util.Assert;
@@ -41,6 +35,7 @@ public record TaskStatusUpdateEvent(String taskId, TaskStatus status, String con
         Assert.checkNotNullParam("taskId", taskId);
         Assert.checkNotNullParam("status", status);
         Assert.checkNotNullParam("contextId", contextId);
+        metadata = metadata == null ? null : Map.copyOf(metadata);
     }
 
     @Override
@@ -142,8 +137,8 @@ public record TaskStatusUpdateEvent(String taskId, TaskStatus status, String con
          * @param metadata the metadata map
          * @return this builder for method chaining
          */
-        public Builder metadata(Map<String, Object> metadata) {
-            this.metadata = metadata;
+        public Builder metadata(@Nullable Map<String, Object> metadata) {
+            this.metadata = metadata == null ? null : Map.copyOf(metadata);
             return this;
         }
 

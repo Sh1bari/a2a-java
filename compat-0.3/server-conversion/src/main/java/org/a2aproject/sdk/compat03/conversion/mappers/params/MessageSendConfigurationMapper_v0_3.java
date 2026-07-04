@@ -16,7 +16,7 @@ import org.mapstruct.Mapper;
  * Key differences:
  * <ul>
  *   <li>v0.3: {@code PushNotificationConfig pushNotificationConfig, Boolean blocking}</li>
- *   <li>v1.0: {@code TaskPushNotificationConfig taskPushNotificationConfig, Boolean returnImmediately}</li>
+ *   <li>v1.0: {@code TaskPushNotificationConfig taskPushNotificationConfig, boolean returnImmediately}</li>
  * </ul>
  * <p>
  * Conversion strategy:
@@ -61,10 +61,10 @@ public interface MessageSendConfigurationMapper_v0_3 {
         }
 
         // Convert blocking to returnImmediately (inverse semantics)
-        Boolean returnImmediately = v03.blocking() != null ? !v03.blocking() : null;
+        boolean returnImmediately = v03.blocking() != null ? !v03.blocking() : false;
 
         return new MessageSendConfiguration(
-            v03.acceptedOutputModes(),
+            v03.acceptedOutputModes() == null ? java.util.List.of() : v03.acceptedOutputModes(),
             v03.historyLength(),
             taskPushConfig,
             returnImmediately
@@ -95,7 +95,7 @@ public interface MessageSendConfigurationMapper_v0_3 {
         }
 
         // Convert returnImmediately to blocking (inverse semantics)
-        Boolean blocking = v10.returnImmediately() != null ? !v10.returnImmediately() : null;
+        Boolean blocking = !v10.returnImmediately();
 
         return new MessageSendConfiguration_v0_3(
             v10.acceptedOutputModes(),

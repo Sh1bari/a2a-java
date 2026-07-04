@@ -57,9 +57,9 @@ public interface MessageMapper_v0_3 {
             v03.messageId(),
             v03.contextId(),
             v03.taskId(),
-            v03.referenceTaskIds(),
+            v03.referenceTaskIds() == null ? List.of() : v03.referenceTaskIds(),
             v03.metadata(),
-            v03.extensions()
+            v03.extensions() == null ? List.of() : v03.extensions()
         );
     }
 

@@ -51,7 +51,7 @@ import org.jspecify.annotations.Nullable;
  *
  *     // Access configuration if needed
  *     MessageSendConfiguration config = context.getConfiguration();
- *     boolean returnImmediately = config != null && Boolean.TRUE.equals(config.returnImmediately());
+ *     boolean returnImmediately = config != null && config.returnImmediately();
  *
  *     // Process and respond...
  * }

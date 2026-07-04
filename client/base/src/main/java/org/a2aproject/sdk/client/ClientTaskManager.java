@@ -68,7 +68,7 @@ class ClientTaskManager {
 
         Task.Builder taskBuilder = Task.builder(task);
         if (taskStatusUpdateEvent.status().message() != null) {
-            if (task.history() == null) {
+            if (task.history().isEmpty()) {
                 taskBuilder.history(taskStatusUpdateEvent.status().message());
             } else {
                 List<Message> history = new ArrayList<>(task.history());

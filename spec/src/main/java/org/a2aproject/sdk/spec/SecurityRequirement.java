@@ -53,7 +53,11 @@ public record SecurityRequirement(Map<String, List<String>> schemes) {
      */
     public SecurityRequirement {
         Assert.checkNotNullParam("schemes", schemes);
-        schemes = unmodifiableMap(new LinkedHashMap<>(schemes));
+        Map<String, List<String>> copiedSchemes = new LinkedHashMap<>();
+        for (Map.Entry<String, List<String>> entry : schemes.entrySet()) {
+            copiedSchemes.put(entry.getKey(), List.copyOf(entry.getValue()));
+        }
+        schemes = unmodifiableMap(copiedSchemes);
     }
 
     /**

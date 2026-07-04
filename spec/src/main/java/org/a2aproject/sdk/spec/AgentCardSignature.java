@@ -1,10 +1,10 @@
 package org.a2aproject.sdk.spec;
 
-import java.util.Map;
-
 import com.google.gson.annotations.SerializedName;
 import org.a2aproject.sdk.util.Assert;
 import org.jspecify.annotations.Nullable;
+
+import java.util.Map;
 
 /**
  * Represents a digital signature for an {@link AgentCard} using JSON Web Signature (JWS) format.
@@ -46,6 +46,7 @@ public record AgentCardSignature(@Nullable Map<String, Object> header, @Serializ
     public AgentCardSignature {
         Assert.checkNotNullParam("protectedHeader", protectedHeader);
         Assert.checkNotNullParam("signature", signature);
+        header = header == null ? null : Map.copyOf(header);
     }
 
     /**
@@ -86,8 +87,8 @@ public record AgentCardSignature(@Nullable Map<String, Object> header, @Serializ
          * @param header map of header parameters (optional)
          * @return this builder for method chaining
          */
-        public Builder header(Map<String, Object> header) {
-            this.header = header;
+        public Builder header(@Nullable Map<String, Object> header) {
+            this.header = header == null ? null : Map.copyOf(header);
             return this;
         }
 

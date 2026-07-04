@@ -3121,7 +3121,7 @@ public abstract class AbstractA2AServerTest {
      * @return concatenated text from all TextParts in all artifacts
      */
     private String extractTextFromTask(Task task) {
-        if (task.artifacts() == null || task.artifacts().isEmpty()) {
+        if (task.artifacts().isEmpty()) {
             return "";
         }
         return task.artifacts().stream()

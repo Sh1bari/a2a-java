@@ -38,7 +38,7 @@ public class AuthInterceptor extends ClientCallInterceptor {
     public PayloadAndHeaders intercept(String methodName, @Nullable Object payload, Map<String, String> headers,
                                        @Nullable AgentCard agentCard, @Nullable ClientCallContext clientCallContext) {
         Map<String, String> updatedHeaders = new HashMap<>(headers == null ? new HashMap<>() : headers);
-        if (agentCard == null || agentCard.securityRequirements()== null || agentCard.securitySchemes() == null) {
+        if (agentCard == null || agentCard.securityRequirements().isEmpty() || agentCard.securitySchemes().isEmpty()) {
             return new PayloadAndHeaders(payload, updatedHeaders);
         }
         for (SecurityRequirement requirement : agentCard.securityRequirements()) {

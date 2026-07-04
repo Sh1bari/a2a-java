@@ -106,7 +106,7 @@ public class Utils {
      */
     public static Task appendArtifactToTask(Task task, TaskArtifactUpdateEvent event, String taskId) {
         // Append artifacts
-        List<Artifact> artifacts = task.artifacts() == null ? new ArrayList<>() : new ArrayList<>(task.artifacts());
+        List<Artifact> artifacts = new ArrayList<>(task.artifacts());
 
         Artifact newArtifact = event.artifact();
         String artifactId = newArtifact.artifactId();
@@ -249,7 +249,7 @@ public class Utils {
      * @throws A2AClientException if no server interface is available in the AgentCard
      */
     public static AgentInterface getFavoriteInterface(AgentCard agentCard) throws A2AClientException {
-        if (agentCard.supportedInterfaces() == null || agentCard.supportedInterfaces().isEmpty()) {
+        if (agentCard.supportedInterfaces().isEmpty()) {
             throw new A2AClientException("No server interface available in the AgentCard");
         }
         return agentCard.supportedInterfaces().get(0);

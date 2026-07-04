@@ -56,13 +56,13 @@ public interface TaskMapper_v0_3 {
             ? v03.artifacts().stream()
                 .map(ArtifactMapper_v0_3.INSTANCE::toV10)
                 .collect(Collectors.toList())
-            : null;
+            : List.of();
 
         List<Message> history = v03.history() != null
             ? v03.history().stream()
                 .map(MessageMapper_v0_3.INSTANCE::toV10)
                 .collect(Collectors.toList())
-            : null;
+            : List.of();
 
         return new Task(
             v03.id(),
@@ -91,13 +91,13 @@ public interface TaskMapper_v0_3 {
             ? v10.artifacts().stream()
                 .map(ArtifactMapper_v0_3.INSTANCE::fromV10)
                 .collect(Collectors.toList())
-            : null;
+            : List.of();
 
         List<Message_v0_3> history = v10.history() != null
             ? v10.history().stream()
                 .map(MessageMapper_v0_3.INSTANCE::fromV10)
                 .collect(Collectors.toList())
-            : null;
+            : List.of();
 
         return new Task_v0_3(
             v10.id(),

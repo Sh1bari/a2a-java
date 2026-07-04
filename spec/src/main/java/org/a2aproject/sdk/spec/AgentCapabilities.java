@@ -1,6 +1,8 @@
 package org.a2aproject.sdk.spec;
 
 import java.util.List;
+
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -33,7 +35,23 @@ import org.jspecify.annotations.Nullable;
 public record AgentCapabilities(boolean streaming,
                                 boolean pushNotifications,
                                 boolean extendedAgentCard,
-                                @Nullable List<AgentExtension> extensions) {
+                                List<AgentExtension> extensions) {
+
+    public AgentCapabilities(boolean streaming,
+                             boolean pushNotifications,
+                             boolean extendedAgentCard,
+                             List<AgentExtension> extensions) {
+        this.streaming = streaming;
+        this.pushNotifications = pushNotifications;
+        this.extendedAgentCard = extendedAgentCard;
+        @NonNull List<AgentExtension> safeExtensions;
+        if (extensions == null) {
+            safeExtensions = List.of();
+        } else {
+            safeExtensions = List.copyOf(extensions);
+        }
+        this.extensions = safeExtensions;
+    }
 
     /**
      * Create a new Builder
@@ -62,7 +80,7 @@ public record AgentCapabilities(boolean streaming,
         private boolean streaming;
         private boolean pushNotifications;
         private boolean extendedAgentCard;
-        private @Nullable List<AgentExtension> extensions;
+        private List<AgentExtension> extensions = List.of();
 
         /**
          * Creates a new Builder with all capabilities set to false by default.
@@ -120,7 +138,7 @@ public record AgentCapabilities(boolean streaming,
          * @return this builder for method chaining
          * @see AgentExtension
          */
-        public Builder extensions(List<AgentExtension> extensions) {
+        public Builder extensions(@Nullable List<AgentExtension> extensions) {
             this.extensions = extensions;
             return this;
         }

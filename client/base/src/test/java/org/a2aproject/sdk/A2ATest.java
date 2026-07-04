@@ -3,6 +3,7 @@ package org.a2aproject.sdk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,6 +24,8 @@ public class A2ATest {
         assertEquals(Message.Role.ROLE_USER, message.role());
         assertEquals(1, message.parts().size());
         assertEquals(text, ((TextPart) message.parts().get(0)).text());
+        assertNotNull(message.referenceTaskIds());
+        assertTrue(message.referenceTaskIds().isEmpty());
         assertNotNull(message.messageId());
         assertNull(message.contextId());
         assertNull(message.taskId());
@@ -74,7 +77,8 @@ public class A2ATest {
         assertEquals(text, ((TextPart) message.parts().get(0)).text());
         assertNotNull(message.messageId());
         assertNull(message.metadata());
-        assertNull(message.referenceTaskIds());
+        assertNotNull(message.referenceTaskIds());
+        assertTrue(message.referenceTaskIds().isEmpty());
     }
 
     @Test
@@ -88,6 +92,8 @@ public class A2ATest {
         assertNull(message.taskId());
         assertEquals(1, message.parts().size());
         assertEquals(text, ((TextPart) message.parts().get(0)).text());
+        assertNotNull(message.referenceTaskIds());
+        assertTrue(message.referenceTaskIds().isEmpty());
     }
 
     @Test

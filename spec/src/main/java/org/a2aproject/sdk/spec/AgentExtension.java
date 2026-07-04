@@ -37,6 +37,7 @@ public record AgentExtension (@Nullable String description, @Nullable Map<String
      */
     public AgentExtension {
         Assert.checkNotNullParam("uri", uri);
+        params = params == null ? null : Map.copyOf(params);
     }
 
     /**
@@ -90,8 +91,8 @@ public record AgentExtension (@Nullable String description, @Nullable Map<String
          * @param params map of parameter key-value pairs (optional)
          * @return this builder for method chaining
          */
-        public Builder params(Map<String, Object> params) {
-            this.params = params;
+        public Builder params(@Nullable Map<String, Object> params) {
+            this.params = params == null ? null : Map.copyOf(params);
             return this;
         }
 

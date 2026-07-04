@@ -38,6 +38,7 @@ public record ClientCredentialsOAuthFlow(String refreshUrl, Map<String, String> 
     public ClientCredentialsOAuthFlow {
         Assert.checkNotNullParam("scopes", scopes);
         Assert.checkNotNullParam("tokenUrl", tokenUrl);
+        scopes = Map.copyOf(scopes);
     }
 
 }

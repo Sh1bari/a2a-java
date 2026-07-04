@@ -50,7 +50,7 @@ public interface ArtifactMapper_v0_3 {
             v03.description(),
             parts,
             v03.metadata(),
-            v03.extensions()
+            v03.extensions() == null ? List.of() : v03.extensions()
         );
     }
 

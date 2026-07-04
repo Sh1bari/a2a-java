@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.a2aproject.sdk.util.Assert;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -43,8 +44,8 @@ import org.jspecify.annotations.Nullable;
  * @see Message
  * @see <a href="https://a2a-protocol.org/latest/">A2A Protocol Specification</a>
  */
-public record Task(String id, String contextId, TaskStatus status, @Nullable List<Artifact> artifacts,
-        @Nullable List<Message> history, @Nullable Map<String, Object> metadata) implements EventKind, StreamingEventKind {
+public record Task(String id, String contextId, TaskStatus status, List<Artifact> artifacts,
+        List<Message> history, @Nullable Map<String, Object> metadata) implements EventKind, StreamingEventKind {
 
     /**
      * The identifier when used in streaming responses
@@ -62,13 +63,34 @@ public record Task(String id, String contextId, TaskStatus status, @Nullable Lis
      * @param metadata additional metadata for the task
      * @throws IllegalArgumentException if id, contextId, or status is null
      */
-    public Task {
+    public Task(String id,
+                String contextId,
+                TaskStatus status,
+                List<Artifact> artifacts,
+                List<Message> history,
+                @Nullable Map<String, Object> metadata) {
         Assert.checkNotNullParam("id", id);
         Assert.checkNotNullParam("contextId", contextId);
         Assert.checkNotNullParam("status", status);
-        artifacts = artifacts != null ? List.copyOf(artifacts) : List.of();
-        history = history != null ? List.copyOf(history) : List.of();
-        metadata = (metadata != null) ? Map.copyOf(metadata) : null;
+        @NonNull List<Artifact> safeArtifacts;
+        if (artifacts == null) {
+            safeArtifacts = List.of();
+        } else {
+            safeArtifacts = List.copyOf(artifacts);
+        }
+        @NonNull List<Message> safeHistory;
+        if (history == null) {
+            safeHistory = List.of();
+        } else {
+            safeHistory = List.copyOf(history);
+        }
+        Map<String, Object> safeMetadata = metadata != null ? Map.copyOf(metadata) : null;
+        this.id = id;
+        this.contextId = contextId;
+        this.status = status;
+        this.artifacts = safeArtifacts;
+        this.history = safeHistory;
+        this.metadata = safeMetadata;
     }
 
     @Override
@@ -122,8 +144,8 @@ public record Task(String id, String contextId, TaskStatus status, @Nullable Lis
         private @Nullable String id;
         private @Nullable String contextId;
         private @Nullable TaskStatus status;
-        private @Nullable List<Artifact> artifacts;
-        private @Nullable List<Message> history;
+        private List<Artifact> artifacts = List.of();
+        private List<Message> history = List.of();
         private @Nullable Map<String, Object> metadata;
 
         /**

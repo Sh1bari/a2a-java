@@ -22,8 +22,8 @@ import org.jspecify.annotations.Nullable;
  * @see TaskPushNotificationConfig for push notification options
  * @see <a href="https://a2a-protocol.org/latest/">A2A Protocol Specification</a>
  */
-public record MessageSendConfiguration(@Nullable List<String> acceptedOutputModes, @Nullable Integer historyLength,
-        @Nullable TaskPushNotificationConfig taskPushNotificationConfig, Boolean returnImmediately) {
+public record MessageSendConfiguration(List<String> acceptedOutputModes, @Nullable Integer historyLength,
+        @Nullable TaskPushNotificationConfig taskPushNotificationConfig, boolean returnImmediately) {
 
     /**
      * Compact constructor for validation.
@@ -35,10 +35,23 @@ public record MessageSendConfiguration(@Nullable List<String> acceptedOutputMode
      * @param returnImmediately whether to return immediately
      * @throws IllegalArgumentException if historyLength is negative
      */
-    public MessageSendConfiguration {
+    public MessageSendConfiguration(List<String> acceptedOutputModes,
+                                    @Nullable Integer historyLength,
+                                    @Nullable TaskPushNotificationConfig taskPushNotificationConfig,
+                                    boolean returnImmediately) {
         if (historyLength != null && historyLength < 0) {
             throw new IllegalArgumentException("Invalid history length");
         }
+        @NonNull List<String> safeAcceptedOutputModes;
+        if (acceptedOutputModes == null) {
+            safeAcceptedOutputModes = List.of();
+        } else {
+            safeAcceptedOutputModes = List.copyOf(acceptedOutputModes);
+        }
+        this.acceptedOutputModes = safeAcceptedOutputModes;
+        this.historyLength = historyLength;
+        this.taskPushNotificationConfig = taskPushNotificationConfig;
+        this.returnImmediately = returnImmediately;
     }
 
     /**
@@ -57,10 +70,10 @@ public record MessageSendConfiguration(@Nullable List<String> acceptedOutputMode
      */
     public static class Builder {
 
-        @Nullable List<String> acceptedOutputModes;
+        List<String> acceptedOutputModes = List.of();
         @Nullable Integer historyLength;
         @Nullable TaskPushNotificationConfig taskPushNotificationConfig;
-        Boolean returnImmediately = false;
+        boolean returnImmediately = false;
 
         /**
          * Creates a new Builder with all fields unset.
@@ -74,7 +87,7 @@ public record MessageSendConfiguration(@Nullable List<String> acceptedOutputMode
          * @param acceptedOutputModes list of output modes the client can handle
          * @return this builder
          */
-        public Builder acceptedOutputModes(List<String> acceptedOutputModes) {
+        public Builder acceptedOutputModes(@Nullable List<String> acceptedOutputModes) {
             this.acceptedOutputModes = acceptedOutputModes;
             return this;
         }
@@ -112,7 +125,7 @@ public record MessageSendConfiguration(@Nullable List<String> acceptedOutputMode
          * @param returnImmediately true to return immediately, false to wait for task completion
          * @return this builder
          */
-        public Builder returnImmediately(@NonNull Boolean returnImmediately) {
+        public Builder returnImmediately(boolean returnImmediately) {
             this.returnImmediately = returnImmediately;
             return this;
         }

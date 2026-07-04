@@ -35,7 +35,7 @@ public class A2AExtensions {
     }
 
     public static @Nullable AgentExtension findExtensionByUri(AgentCard card, String uri) {
-        if (card.capabilities() == null || card.capabilities().extensions() == null) {
+        if (card.capabilities().extensions().isEmpty()) {
             return null;
         }
         for (AgentExtension extension : card.capabilities().extensions()) {
@@ -55,7 +55,7 @@ public class A2AExtensions {
      */
     public static void validateRequiredExtensions(AgentCard agentCard, ServerCallContext context)
             throws ExtensionSupportRequiredError {
-        if (agentCard.capabilities() == null || agentCard.capabilities().extensions() == null) {
+        if (agentCard.capabilities().extensions().isEmpty()) {
             return;
         }
 

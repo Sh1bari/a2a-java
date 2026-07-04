@@ -1,8 +1,9 @@
 package org.a2aproject.sdk.spec;
 
-import org.a2aproject.sdk.util.Assert;
 import java.util.Collections;
 import java.util.Map;
+
+import org.a2aproject.sdk.util.Assert;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -13,20 +14,23 @@ import org.jspecify.annotations.Nullable;
  *
  * @param id the unique task identifier (required)
  * @param tenant optional tenant, provided as a path parameter
- * @param metadata optional arbitrary key-value metadata (e.g. cancellation reason)
+ * @param metadata arbitrary key-value metadata (e.g. cancellation reason)
  * @see <a href="https://a2a-protocol.org/latest/">A2A Protocol Specification</a>
  */
 public record CancelTaskParams(String id, @Nullable String tenant, Map<String, Object> metadata) {
 
     /**
-     * Compact constructor for validation.
-     * Validates that required parameters are not null.
+     * Canonical constructor for validation and normalization.
      *
      * @param id the task identifier
      * @param tenant the tenant identifier
+     * @param metadata arbitrary request metadata
      */
-    public CancelTaskParams {
+    public CancelTaskParams(String id, @Nullable String tenant, @Nullable Map<String, Object> metadata) {
         Assert.checkNotNullParam("id", id);
+        this.id = id;
+        this.tenant = tenant;
+        this.metadata = metadata == null ? Map.of() : Map.copyOf(metadata);
     }
 
     /**

@@ -138,7 +138,7 @@ public class EventSerializationTest {
     public void testTaskArtifactUpdateEventSerialization() throws JsonProcessingException {
         // Create a TaskArtifactUpdateEvent
         List<Part<?>> parts = List.of(new TextPart("Test artifact content"));
-        Artifact artifact = new Artifact("test-artifact-123", "Test Artifact", "Test description", parts, null, null);
+        Artifact artifact = new Artifact("test-artifact-123", "Test Artifact", "Test description", parts, null, List.of());
         TaskArtifactUpdateEvent originalEvent = TaskArtifactUpdateEvent.builder()
                 .taskId("test-task-xyz")
                 .contextId("test-context-uvw")

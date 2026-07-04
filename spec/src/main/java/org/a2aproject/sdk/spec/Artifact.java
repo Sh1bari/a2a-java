@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.a2aproject.sdk.util.Assert;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -31,7 +32,7 @@ import org.jspecify.annotations.Nullable;
  * @see <a href="https://a2a-protocol.org/latest/">A2A Protocol Specification</a>
  */
 public record Artifact(String artifactId, @Nullable String name, @Nullable String description, List<Part<?>> parts, @Nullable Map<String, Object> metadata,
-                       @Nullable List<String> extensions) {
+                       List<String> extensions) {
 
     /**
      * Compact constructor that validates required fields.
@@ -44,12 +45,31 @@ public record Artifact(String artifactId, @Nullable String name, @Nullable Strin
      * @param extensions the extensions parameter (see class-level JavaDoc)
      * @throws IllegalArgumentException if artifactId or parts is null, or if parts is empty
      */
-    public Artifact {
+    public Artifact(String artifactId,
+                    @Nullable String name,
+                    @Nullable String description,
+                    List<Part<?>> parts,
+                    @Nullable Map<String, Object> metadata,
+                    List<String> extensions) {
         Assert.checkNotNullParam("artifactId", artifactId);
         Assert.checkNotNullParam("parts", parts);
         if (parts.isEmpty()) {
             throw new IllegalArgumentException("Parts cannot be empty");
         }
+        @NonNull List<Part<?>> safeParts = List.copyOf(parts);
+        Map<String, Object> safeMetadata = metadata == null ? null : Map.copyOf(metadata);
+        @NonNull List<String> safeExtensions;
+        if (extensions == null) {
+            safeExtensions = List.of();
+        } else {
+            safeExtensions = List.copyOf(extensions);
+        }
+        this.artifactId = artifactId;
+        this.name = name;
+        this.description = description;
+        this.parts = safeParts;
+        this.metadata = safeMetadata;
+        this.extensions = safeExtensions;
     }
 
     /**
@@ -94,9 +114,9 @@ public record Artifact(String artifactId, @Nullable String name, @Nullable Strin
         private @Nullable String artifactId;
         private @Nullable String name;
         private @Nullable String description;
-        private @Nullable List<Part<?>> parts;
+        private List<Part<?>> parts = List.of();
         private @Nullable Map<String, Object> metadata;
-        private @Nullable List<String> extensions;
+        private List<String> extensions = List.of();
 
         /**
          * Creates a new Builder with all fields unset.
@@ -113,7 +133,7 @@ public record Artifact(String artifactId, @Nullable String name, @Nullable Strin
             artifactId = existingArtifact.artifactId;
             name = existingArtifact.name;
             description = existingArtifact.description;
-            parts = existingArtifact.parts;
+            parts = List.copyOf(existingArtifact.parts);
             metadata = existingArtifact.metadata;
             extensions = existingArtifact.extensions;
         }
@@ -158,7 +178,7 @@ public record Artifact(String artifactId, @Nullable String name, @Nullable Strin
          * @return this builder for method chaining
          */
         public Builder parts(List<Part<?>> parts) {
-            this.parts = parts;
+            this.parts = List.copyOf(parts);
             return this;
         }
 
@@ -180,7 +200,7 @@ public record Artifact(String artifactId, @Nullable String name, @Nullable Strin
          * @return this builder for method chaining
          */
         public Builder metadata(@Nullable Map<String, Object> metadata) {
-            this.metadata = metadata;
+            this.metadata = metadata == null ? null : Map.copyOf(metadata);
             return this;
         }
 
@@ -191,7 +211,7 @@ public record Artifact(String artifactId, @Nullable String name, @Nullable Strin
          * @return this builder for method chaining
          */
         public Builder extensions(@Nullable List<String> extensions) {
-            this.extensions = (extensions == null) ? null : List.copyOf(extensions);
+            this.extensions = extensions;
             return this;
         }
 
@@ -202,7 +222,13 @@ public record Artifact(String artifactId, @Nullable String name, @Nullable Strin
          * @throws IllegalArgumentException if required fields are missing or parts is empty
          */
         public Artifact build() {
-            return new Artifact(Assert.checkNotNullParam("artifactId", artifactId), name, description, Assert.checkNotNullParam("parts", parts), metadata, extensions);
+            return new Artifact(
+                    Assert.checkNotNullParam("artifactId", artifactId),
+                    name,
+                    description,
+                    Assert.checkNotNullParam("parts", parts),
+                    metadata,
+                    extensions);
         }
     }
 }

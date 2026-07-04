@@ -33,7 +33,7 @@ public final class ArtifactUtils {
             description,
             parts,
             null,
-            null
+            List.of()
         );
     }
 

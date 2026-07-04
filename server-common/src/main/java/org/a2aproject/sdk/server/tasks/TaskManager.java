@@ -90,7 +90,7 @@ public class TaskManager {
                 .status(event.status());
 
         if (task.status().message() != null) {
-            List<Message> newHistory = task.history() == null ? new ArrayList<>() : new ArrayList<>(task.history());
+            List<Message> newHistory = new ArrayList<>(task.history());
             newHistory.add(task.status().message());
             builder.history(newHistory);
         }

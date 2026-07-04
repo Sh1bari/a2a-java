@@ -35,6 +35,7 @@ public record MessageSendParams(Message message, @Nullable MessageSendConfigurat
      */
     public MessageSendParams {
         Assert.checkNotNullParam("message", message);
+        metadata = metadata == null ? null : Map.copyOf(metadata);
     }
 
     /**
@@ -104,7 +105,7 @@ public record MessageSendParams(Message message, @Nullable MessageSendConfigurat
          * @return this builder
          */
         public Builder metadata(@Nullable Map<String, Object> metadata) {
-            this.metadata = metadata;
+            this.metadata = metadata == null ? null : Map.copyOf(metadata);
             return this;
         }
 

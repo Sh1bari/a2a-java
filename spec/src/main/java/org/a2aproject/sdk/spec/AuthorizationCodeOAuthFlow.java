@@ -42,5 +42,6 @@ public record AuthorizationCodeOAuthFlow(String authorizationUrl, String refresh
         Assert.checkNotNullParam("authorizationUrl", authorizationUrl);
         Assert.checkNotNullParam("scopes", scopes);
         Assert.checkNotNullParam("tokenUrl", tokenUrl);
+        scopes = Map.copyOf(scopes);
     }
 }
